@@ -35,12 +35,12 @@ class Product extends Model
 
     public function getIsAvailableAttribute(): bool
     {
-        return $this->quantity_in_inventory > self::LOW_STOCK_MAX;
+        return $this->quantity_in_inventory > 0;
     }
 
     public function getInventoryStatusAttribute(): string
     {
-        if ($this->quantity_in_inventory === 0) {
+        if ($this->quantity_in_inventory <= 0) {
             return 'Sin stock';
         }
 
