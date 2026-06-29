@@ -39,7 +39,7 @@ class ProductController extends Controller
                 }
 
                 if ($availability === 'out_of_stock') {
-                    $query->where('quantity_in_inventory', 0);
+                    $query->where('quantity_in_inventory', '<=', 0);
                 }
 
                 if ($availability === 'low_stock') {
