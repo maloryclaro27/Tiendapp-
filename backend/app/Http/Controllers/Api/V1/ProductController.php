@@ -34,7 +34,7 @@ class ProductController extends Controller
                 $availability = $request->string('availability')->toString();
 
                 if ($availability === 'available') {
-                    $query->where('quantity_in_inventory', '>', 0);
+                    $query->where('quantity_in_inventory', '>', Product::LOW_STOCK_MAX);
                 }
 
                 if ($availability === 'out_of_stock') {
@@ -42,7 +42,7 @@ class ProductController extends Controller
                 }
 
                 if ($availability === 'low_stock') {
-                    $query->whereBetween('quantity_in_inventory', [1, 10]);
+                    $query->whereBetween('quantity_in_inventory', [1, Product::LOW_STOCK_MAX]);
                 }
             });
 
