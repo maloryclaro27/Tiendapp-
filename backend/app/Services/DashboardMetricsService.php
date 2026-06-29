@@ -11,12 +11,19 @@ class DashboardMetricsService
     public function metrics(): array
     {
         $totalProducts = Product::query()->count();
+
         $availableProducts = Product::query()
+            ->where('quantity_in_inventory', '>', 0)
+            ->count();
+
+        $healthyStockProducts = Product::query()
             ->where('quantity_in_inventory', '>', Product::LOW_STOCK_MAX)
             ->count();
+
         $lowStockProducts = Product::query()
             ->whereBetween('quantity_in_inventory', [1, Product::LOW_STOCK_MAX])
             ->count();
+
         $outOfStockProducts = Product::query()
             ->where('quantity_in_inventory', '<=', 0)
             ->count();
@@ -28,11 +35,13 @@ class DashboardMetricsService
             'total_products' => $totalProducts,
             'total_inventory_units' => (int) Product::query()->sum('quantity_in_inventory'),
             'available_products' => $availableProducts,
+            'healthy_stock_products' => $healthyStockProducts,
             'low_stock_products' => $lowStockProducts,
             'out_of_stock_products' => $outOfStockProducts,
             'stock_alerts' => $stockAlerts,
-            'stock_health_percent' => $this->percentage($availableProducts, $totalProducts, 0),
+            'stock_health_percent' => $this->percentage($healthyStockProducts, $totalProducts, 0),
             'available_percent' => $this->percentage($availableProducts, $totalProducts),
+            'healthy_stock_percent' => $this->percentage($healthyStockProducts, $totalProducts),
             'low_stock_percent' => $this->percentage($lowStockProducts, $totalProducts),
             'out_of_stock_percent' => $this->percentage($outOfStockProducts, $totalProducts),
         ];

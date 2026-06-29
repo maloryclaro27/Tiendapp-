@@ -29,16 +29,18 @@
         $totalBrands = (int) $metrics['total_brands'];
         $totalProducts = (int) $metrics['total_products'];
         $totalInventoryUnits = (int) $metrics['total_inventory_units'];
-        $outOfStockProducts = (int) $metrics['out_of_stock_products'];
-        $lowStockProducts = (int) $metrics['low_stock_products'];
-        $stockAlerts = $outOfStockProducts + $lowStockProducts;
-        $availableProducts = max($totalProducts - $stockAlerts, 0);
-        $stockHealth = $totalProducts > 0 ? round(($availableProducts / $totalProducts) * 100) : 0;
-        $availablePercent = $totalProducts > 0 ? round(($availableProducts / $totalProducts) * 100, 2) : 0;
-        $lowStockPercent = $totalProducts > 0 ? round(($lowStockProducts / $totalProducts) * 100, 2) : 0;
-        $outOfStockPercent = $totalProducts > 0 ? round(($outOfStockProducts / $totalProducts) * 100, 2) : 0;
 
-        $lowStockEnd = min($availablePercent + $lowStockPercent, 100);
+        $availableProducts = (int) $metrics['available_products'];
+        $healthyStockProducts = (int) $metrics['healthy_stock_products'];
+        $lowStockProducts = (int) $metrics['low_stock_products'];
+        $outOfStockProducts = (int) $metrics['out_of_stock_products'];
+        $stockAlerts = (int) $metrics['stock_alerts'];
+
+        $stockHealth = (int) $metrics['stock_health_percent'];
+        $availablePercent = (float) $metrics['available_percent'];
+        $healthyStockPercent = (float) $metrics['healthy_stock_percent'];
+        $lowStockPercent = (float) $metrics['low_stock_percent'];
+        $outOfStockPercent = (float) $metrics['out_of_stock_percent'];
     @endphp
 
     <div class="grid grid-cols-1 gap-6 xl:grid-cols-12">
@@ -178,7 +180,7 @@
                 <div class="rounded-3xl border border-white/40 p-5" style="background: #313335;">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <div class="text-xl font-bold text-white">Catalogo disponible</div>
+                            <div class="text-xl font-bold text-white">Stock saludable</div>
                             <div class="mt-2 text-xl font-bold text-white">
                                 {{ number_format($stockHealth) }}%
                             </div>
@@ -194,7 +196,7 @@
 
                     <div class="mt-5 h-2.5 overflow-hidden rounded-full bg-white/15">
                         <div class="h-full rounded-full transition-all duration-700"
-                            style="width: {{ $availablePercent }}%; background: linear-gradient(90deg, #1a55c9, #4554eb);">
+                            style="width: {{ $healthyStockPercent }}%; background: linear-gradient(90deg, #1a55c9, #4554eb);">
                         </div>
                     </div>
 
@@ -211,17 +213,17 @@
                             <div class="flex items-center gap-3">
                                 <span class="h-3 w-3 rounded-full" style="background: #1a55c9;"></span>
                                 <span class="text-sm font-bold text-white">
-                                    Disponibles: {{ number_format($availableProducts) }}
+                                    Stock saludable: {{ number_format($healthyStockProducts) }}
                                 </span>
                             </div>
                             <div class="text-sm font-bold text-white">
-                                {{ number_format($availablePercent, 0) }}%
+                                {{ number_format($healthyStockPercent, 0) }}%
                             </div>
                         </div>
 
                         <div class="h-2 overflow-hidden rounded-full bg-white/15">
                             <div class="h-full rounded-full transition-all duration-700 group-hover:opacity-90"
-                                style="width: {{ $availablePercent }}%; background: #1a55c9;"></div>
+                                style="width: {{ $healthyStockPercent }}%; background: #1a55c9;"></div>
                         </div>
                     </div>
 
@@ -353,7 +355,7 @@
                     <div class="space-y-4">
                         @foreach ($recentProducts as $product)
                             @php
-                                $stockText = 'Disponible';
+                                $stockText = 'Stock saludable';
                                 $stockStyle =
                                     'background: rgba(26, 85, 201, 0.16); color: #1a55c9; border: 1px solid rgba(26, 85, 201, 0.45);';
 

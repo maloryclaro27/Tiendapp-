@@ -48,6 +48,6 @@ class Product extends Model
             return 'Bajo stock';
         }
 
-        return 'Disponible';
+        return 'Stock saludable';
     }
 }

@@ -20,7 +20,7 @@
             <div>
                 <strong style="color: #ffffff;">Catalogo de productos</strong>
                 <div class="help" style="color: #d8dee9;">
-                    Filtra por unidad de medida, disponibilidad o texto libre.
+                    Filtra por marca, unidad de medida, estado de inventario o texto libre.
                 </div>
             </div>
 
@@ -34,7 +34,7 @@
             <form method="GET" action="{{ route('admin.products.index') }}"
                 class="mb-6 rounded-3xl border border-white/20 p-4"
                 style="background: #313335;">
-                <div class="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-4">
+                <div class="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-6">
                     <input
                         type="text"
                         name="search"
@@ -43,6 +43,16 @@
                         placeholder="Buscar producto u observacion..."
                         style="background: #252729; color: #ffffff; border-color: rgba(255, 255, 255, 0.18);"
                     >
+
+                    <select name="brand_id" class="select w-full"
+                        style="background: #252729; color: #ffffff; border-color: rgba(255, 255, 255, 0.18);">
+                        <option value="">Todas las marcas</option>
+                        @foreach ($brands as $brand)
+                            <option value="{{ $brand->id }}" @selected((int) $selectedBrandId === $brand->id)>
+                                {{ $brand->name }}
+                            </option>
+                        @endforeach
+                    </select>
 
                     <select name="unit_of_measure" class="select w-full"
                         style="background: #252729; color: #ffffff; border-color: rgba(255, 255, 255, 0.18);">
@@ -55,7 +65,8 @@
                     <select name="availability" class="select w-full"
                         style="background: #252729; color: #ffffff; border-color: rgba(255, 255, 255, 0.18);">
                         <option value="">Todos los estados</option>
-                        <option value="available" @selected($selectedAvailability === 'available')>Disponible</option>
+                        <option value="in_stock" @selected(in_array($selectedAvailability, ['available', 'in_stock'], true))>Con inventario</option>
+                        <option value="healthy_stock" @selected($selectedAvailability === 'healthy_stock')>Stock saludable</option>
                         <option value="low_stock" @selected($selectedAvailability === 'low_stock')>Bajo stock</option>
                         <option value="out_of_stock" @selected($selectedAvailability === 'out_of_stock')>Sin stock</option>
                     </select>
@@ -110,7 +121,7 @@
                             <tbody>
                                 @foreach ($products as $product)
                                     @php
-                                        $stockText = 'Disponible';
+                                        $stockText = 'Stock saludable';
                                         $stockStyle = 'background: rgba(26, 85, 201, 0.16); color: #6ec1e5; border: 1px solid rgba(110, 193, 229, 0.45);';
 
                                         if ($product->quantity_in_inventory <= 0) {

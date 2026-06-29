@@ -18,7 +18,7 @@ class UpdateProductRequest extends FormRequest
             'brand_id' => [
                 'required',
                 'integer',
-                Rule::exists('brands', 'id'),
+                Rule::exists('brands', 'id')->whereNull('deleted_at'),
             ],
             'name' => [
                 'required',

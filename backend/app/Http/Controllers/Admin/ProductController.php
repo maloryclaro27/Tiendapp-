@@ -34,7 +34,11 @@ class ProductController extends Controller
             ->when($request->filled('availability'), function ($query) use ($request) {
                 $availability = $request->string('availability')->toString();
 
-                if ($availability === 'available') {
+                if (in_array($availability, ['available', 'in_stock'], true)) {
+                    $query->where('quantity_in_inventory', '>', 0);
+                }
+
+                if ($availability === 'healthy_stock') {
                     $query->where('quantity_in_inventory', '>', Product::LOW_STOCK_MAX);
                 }
 
