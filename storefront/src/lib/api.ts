@@ -67,6 +67,24 @@ export type CollectionResponse<T> = {
   data: T[];
 };
 
+export type CatalogMetrics = {
+  total_brands: number;
+  total_products: number;
+  total_inventory_units: number;
+  available_products: number;
+  healthy_stock_products: number;
+  low_stock_products: number;
+  out_of_stock_products: number;
+  stock_alerts: number;
+  stock_health_percent: number;
+  available_percent: number;
+  healthy_stock_percent: number;
+  low_stock_percent: number;
+  out_of_stock_percent: number;
+};
+
+type MetricsApiResponse = CatalogMetrics | { data: CatalogMetrics };
+
 export type ProductFilters = {
   search?: string;
   brand_id?: string | number;
@@ -151,4 +169,12 @@ export async function getBrands(): Promise<Brand[]> {
   });
 
   return response.data;
+}
+
+export async function getMetrics() {
+  const response = await apiFetch<MetricsApiResponse>("/metrics", {
+    next: { revalidate: 60 },
+  });
+
+  return "data" in response ? response.data : response;
 }
