@@ -51,7 +51,7 @@ class DashboardMetricsService
     {
         return Product::query()
             ->with('brand')
-            ->latest('updated_at')
+            ->latest('inventory_updated_at')
             ->limit($limit)
             ->get();
     }
