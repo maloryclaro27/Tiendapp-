@@ -18,6 +18,7 @@ El foco tecnico esta en una base de datos normalizada, reglas de inventario cons
 ## Tabla de contenido
 
 - [Descripcion](#descripcion)
+- [Capturas](#capturas)
 - [Arquitectura](#arquitectura)
 - [Stack tecnico](#stack-tecnico)
 - [Estructura del proyecto](#estructura-del-proyecto)
@@ -30,6 +31,20 @@ El foco tecnico esta en una base de datos normalizada, reglas de inventario cons
 - [Semantica de inventario](#semantica-de-inventario)
 - [Pruebas](#pruebas)
 - [Decisiones tecnicas](#decisiones-tecnicas)
+
+## Capturas
+
+### Dashboard administrativo
+
+![Dashboard administrativo](docs/screenshots/admin-dashboard.png)
+
+### Storefront
+
+![Storefront](docs/screenshots/storefront-home.png)
+
+### Catalogo de productos
+
+![Catalogo de productos](docs/screenshots/storefront-products.png)
 
 ## Arquitectura
 
