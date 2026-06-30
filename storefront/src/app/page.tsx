@@ -22,7 +22,7 @@ function buildFilters(searchParams: Record<string, string | string[] | undefined
     availability: firstParam(searchParams.availability),
     sort: firstParam(searchParams.sort),
     page: firstParam(searchParams.page),
-    per_page: 9,
+    per_page: 6,
   };
 }
 
@@ -49,7 +49,11 @@ export default async function Home({
       <BrandRail brands={brands} />
       <FeaturedProducts products={productsResponse.data} />
       <ProductFilters brands={brands} filters={filters} />
-      <ProductGrid products={productsResponse.data} />
+      <ProductGrid
+        products={productsResponse.data}
+        meta={productsResponse.meta}
+        filters={filters}
+      />
       <StorefrontFooter />
     </main>
   );
