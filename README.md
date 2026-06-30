@@ -256,23 +256,25 @@ Para mas detalle sobre diseno relacional, indices, patrones de consulta y escala
 
 ## Indices y eficiencia
 
-La estructura de base de datos usa indices simples para relaciones, filtros y ordenamientos directos, e indices compuestos para los patrones principales del catalogo activo.
+La estructura de base de datos usa indices simples para integridad referencial e indices compuestos para los patrones reales del catalogo activo: filtros, ordenamientos, SoftDeletes y consultas de inventario.
 
 | Indice | Tabla | Columnas | Justificacion |
 |---|---|---|---|
-| `idx_brands_reference` | `brands` | `reference` | Identificador unico de marca |
-| `idx_brands_name` | `brands` | `name` | Busqueda y ordenamiento por nombre |
-| `idx_brands_active` | `brands` | `deleted_at`, `name` | Listados de marcas activas con SoftDeletes |
-| `idx_products_brand` | `products` | `brand_id` | Relacion producto-marca |
-| `idx_products_unit` | `products` | `unit_of_measure` | Filtro por unidad de medida |
-| `idx_products_stock` | `products` | `quantity_in_inventory` | Filtros por disponibilidad e inventario |
-| `idx_products_inv_updated` | `products` | `inventory_updated_at` | Ordenamiento por actualizacion de inventario |
-| `idx_products_catalog` | `products` | `deleted_at`, `brand_id`, `unit_of_measure`, `name` | Filtros combinados del catalogo activo |
-| `idx_products_available` | `products` | `deleted_at`, `quantity_in_inventory`, `brand_id` | Consultas de stock, bajo inventario y disponibilidad |
+| `idx_brands_reference` | `brands` | `reference` | Identificador unico de marca y busqueda por referencia |
+| `idx_brands_active` | `brands` | `deleted_at`, `name` | Listados de marcas activas ordenadas por nombre |
+| `idx_products_brand` | `products` | `brand_id` | Soporte de foreign key y lookup directo por marca |
+| `idx_products_catalog` | `products` | `deleted_at`, `brand_id`, `unit_of_measure`, `name` | Filtros combinados del catalogo activo y ordenamiento por nombre |
+| `idx_products_available` | `products` | `deleted_at`, `quantity_in_inventory`, `brand_id` | Consultas de disponibilidad, rangos de stock y metricas de inventario |
+| `idx_products_active_inv_updated` | `products` | `deleted_at`, `inventory_updated_at` | Catalogo activo ordenado por actualizacion de inventario |
+| `idx_products_active_brand_inv_updated` | `products` | `deleted_at`, `brand_id`, `inventory_updated_at` | Filtro por marca con ordenamiento por actualizacion de inventario |
+| `idx_products_active_unit_inv_updated` | `products` | `deleted_at`, `unit_of_measure`, `inventory_updated_at` | Filtro por unidad de medida con ordenamiento por actualizacion de inventario |
+| `idx_products_active_brand_unit_inv_updated` | `products` | `deleted_at`, `brand_id`, `unit_of_measure`, `inventory_updated_at` | Filtro combinado por marca y unidad con ordenamiento por actualizacion de inventario |
 
-Las busquedas textuales con `LIKE "%texto%"` son suficientes para el alcance de la prueba tecnica. En un catalogo de mayor volumen, la mejora natural seria evaluar `FULLTEXT` o un motor de busqueda dedicado.
+Los indices finales fueron validados contra MySQL real con `SHOW INDEX` y `EXPLAIN`. Los indices redundantes `idx_brands_name`, `idx_products_stock`, `idx_products_inv_updated` e `idx_products_unit` fueron eliminados mediante una migracion reversible.
 
-Para mas detalle sobre decisiones de indices, consultas y validacion con `EXPLAIN`, ver `docs/database-notes.md`.
+Las busquedas textuales con `LIKE "%texto%"` se mantienen como una decision consciente para soportar busqueda libre por producto, referencia u observaciones. En un catalogo de mayor volumen, la mejora natural seria evaluar `FULLTEXT` o un motor de busqueda dedicado.
+
+Para mas detalle sobre decisiones de indices, consultas, limitaciones aceptadas y validacion con `EXPLAIN`, ver `docs/database-performance.md`.
 
 ## API REST
 
