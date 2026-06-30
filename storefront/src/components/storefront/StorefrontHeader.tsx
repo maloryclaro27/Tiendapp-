@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { Search, ShieldCheck } from "lucide-react";
 
@@ -43,7 +43,7 @@ export function StorefrontHeader({
           href={adminUrl}
           target="_blank"
           rel="noreferrer"
-          className="hidden items-center gap-2 rounded-full bg-[#10213F] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-[#0B6FEF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB000] md:inline-flex"
+          className="hidden items-center gap-2 rounded-full bg-[#0B6FEF] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-[#0D47C9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB000] md:inline-flex"
         >
           <ShieldCheck className="h-4 w-4" />
           Admin
