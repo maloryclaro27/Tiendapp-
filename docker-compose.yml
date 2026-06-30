@@ -43,5 +43,20 @@ services:
     depends_on:
       - backend
 
+  storefront:
+    build:
+      context: ./storefront
+      dockerfile: Dockerfile
+    container_name: tiendapp_storefront
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8080/api/v1
+      TIENDAPP_INTERNAL_API_URL: http://nginx/api/v1
+      NEXT_PUBLIC_ADMIN_URL: http://localhost:8080/admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - nginx
+
 volumes:
   mysql_data:
