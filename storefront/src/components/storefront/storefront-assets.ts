@@ -1,4 +1,4 @@
-﻿import type { Brand, Product } from "@/lib/api";
+import type { Brand, Product } from "@/lib/api";
 
 export type StorefrontBrand = Brand;
 
@@ -31,25 +31,25 @@ export function getProductImageSrc(productName: string) {
 export const socialLinks: SocialLink[] = [
   {
     label: "LinkedIn",
-    href: "#",
+    href: "https://www.linkedin.com/company/tiendapp-s.a.s/?originalSubdomain=co",
     iconSrc: "/catalog/social/linkedin.png",
     fallback: "in",
   },
   {
     label: "Instagram",
-    href: "#",
+    href: "https://www.instagram.com/tiendapp.latam/?hl=es",
     iconSrc: "/catalog/social/instagram.png",
     fallback: "IG",
   },
   {
     label: "Facebook",
-    href: "#",
+    href: "https://www.facebook.com/tiendapp.latam/",
     iconSrc: "/catalog/social/facebook.png",
     fallback: "f",
   },
   {
     label: "YouTube",
-    href: "#",
+    href: "https://www.youtube.com/c/TiendAPP/videos",
     iconSrc: "/catalog/social/youtube.png",
     fallback: "YT",
   },
