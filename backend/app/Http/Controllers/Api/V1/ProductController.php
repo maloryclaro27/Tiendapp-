@@ -3,24 +3,25 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\ProductIndexRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ProductController extends Controller
 {
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(ProductIndexRequest $request): AnonymousResourceCollection
     {
-        $perPage = min((int) $request->integer('per_page', 12), 50);
+        $filters = $request->validated();
+        $perPage = (int) ($filters['per_page'] ?? 12);
 
         $products = Product::query()
             ->with('brand')
-            ->search($request->string('search')->toString())
-            ->byBrand($request->filled('brand_id') ? $request->integer('brand_id') : null)
-            ->byUnit($request->string('unit_of_measure')->toString())
-            ->withAvailability($request->string('availability')->toString())
-            ->sorted($request->string('sort')->toString())
+            ->search($filters['search'] ?? null)
+            ->byBrand($filters['brand_id'] ?? null)
+            ->byUnit($filters['unit_of_measure'] ?? null)
+            ->withAvailability($filters['availability'] ?? null)
+            ->sorted($filters['sort'] ?? null)
             ->paginate($perPage)
             ->withQueryString();
 

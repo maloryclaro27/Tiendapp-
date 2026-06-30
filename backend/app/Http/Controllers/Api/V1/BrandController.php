@@ -3,21 +3,22 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\BrandIndexRequest;
 use App\Http\Resources\BrandResource;
 use App\Models\Brand;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class BrandController extends Controller
 {
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(BrandIndexRequest $request): AnonymousResourceCollection
     {
-        $perPage = min((int) $request->integer('per_page', 15), 50);
+        $filters = $request->validated();
+        $perPage = (int) ($filters['per_page'] ?? 15);
 
         $brands = Brand::query()
             ->withCount('products')
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $search = $request->string('search')->toString();
+            ->when(! empty($filters['search']), function ($query) use ($filters) {
+                $search = $filters['search'];
 
                 $query->where(function ($query) use ($search) {
                     $query->where('name', 'like', "%{$search}%")

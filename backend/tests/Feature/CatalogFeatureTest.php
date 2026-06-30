@@ -290,4 +290,40 @@ class CatalogFeatureTest extends TestCase
         $this->assertSame(9, Product::count());
         $this->assertSame(205, Product::sum('quantity_in_inventory'));
     }
+    public function test_products_api_rejects_invalid_filter_parameters(): void
+    {
+        $brand = Brand::factory()->create();
+        $brand->delete();
+
+        $this->getJson('/api/v1/products?availability=invalid')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('availability');
+
+        $this->getJson('/api/v1/products?sort=invalid')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('sort');
+
+        $this->getJson('/api/v1/products?unit_of_measure=Paquete')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('unit_of_measure');
+
+        $this->getJson("/api/v1/products?brand_id={$brand->id}")
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('brand_id');
+
+        $this->getJson('/api/v1/products?per_page=100')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('per_page');
+    }
+
+    public function test_brands_api_rejects_invalid_pagination_parameters(): void
+    {
+        $this->getJson('/api/v1/brands?per_page=100')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('per_page');
+
+        $this->getJson('/api/v1/brands?page=0')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('page');
+    }
 }
