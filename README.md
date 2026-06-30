@@ -77,51 +77,52 @@ tiendapp-catalog/
 
 Desde la raiz del proyecto:
 
-1. Crear el archivo de entorno del backend:
-
-```bash
-cd backend
-copy .env.example .env
-cd ..
-```
-
-En Linux o macOS:
-
-```bash
-cd backend
-cp .env.example .env
-cd ..
-```
-
-2. Levantar los servicios:
+1. Levantar los servicios:
 
 ```bash
 docker compose up -d --build
 ```
 
-3. Instalar dependencias PHP si es una maquina limpia:
+2. El contenedor backend ejecuta un entrypoint no destructivo que:
 
-```bash
-docker compose exec backend composer install
-```
+- instala dependencias PHP con Composer si no existe vendor/
+- crea .env desde .env.example si falta
+- genera APP_KEY si esta vacia
+- inicia php-fpm
 
-4. Generar la APP_KEY de Laravel:
+No ejecuta migraciones ni seeders automaticamente para evitar operaciones destructivas sobre la base de datos.
 
-```bash
-docker compose exec backend php artisan key:generate
-```
-
-5. Ejecutar migraciones y seeders:
+3. Ejecutar migraciones y seeders:
 
 ```bash
 docker compose exec backend php artisan migrate:fresh --seed
 ```
 
-6. Abrir la aplicacion:
+4. Abrir la aplicacion:
 
 - Storefront: http://localhost:3000
 - Admin Laravel: http://localhost:8080/admin
 - API: http://localhost:8080/api/v1
+
+---
+
+## Evaluacion rapida
+
+Para revisar la prueba de forma rapida:
+
+```bash
+docker compose up -d --build
+docker compose exec backend php artisan migrate:fresh --seed
+docker compose exec backend php artisan test
+```
+
+Luego abrir:
+
+- Storefront: http://localhost:3000
+- Admin Laravel: http://localhost:8080/admin
+- API metrics: http://localhost:8080/api/v1/metrics
+
+El backend cuenta con un entrypoint no destructivo que prepara dependencias, .env y APP_KEY cuando faltan. Las migraciones y seeders se ejecutan manualmente para mantener control sobre la base de datos.
 
 ---
 
