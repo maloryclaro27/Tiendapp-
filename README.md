@@ -16,7 +16,8 @@ Backend:
 - Soft deletes
 - Form Requests
 - API REST versionada
-- Feature tests
+- Unit tests
+- Feature / integration tests
 
 Admin:
 - Laravel Blade
@@ -336,8 +337,9 @@ docker compose down
 
 ## Pruebas automatizadas
 
-El backend cuenta con pruebas feature para cubrir:
+El backend cuenta con pruebas unitarias y feature/integration tests para cubrir:
 
+- Reglas unitarias de inventario.
 - CRUD de marcas.
 - CRUD de productos.
 - Soft deletes.
@@ -355,7 +357,7 @@ docker compose exec backend php artisan test
 Resultado esperado en el estado actual:
 
 ```text
-13 passed
+15 passed / 103 assertions
 ```
 
 ---
