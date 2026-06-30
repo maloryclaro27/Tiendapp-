@@ -34,6 +34,8 @@ export default async function Home({
   const resolvedSearchParams = await searchParams;
   const filters = buildFilters(resolvedSearchParams);
 
+  const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL ?? "http://localhost:8080/admin";
+
   const [productsResponse, brands, metrics] = await Promise.all([
     getProducts(filters),
     getBrands(),
@@ -42,7 +44,7 @@ export default async function Home({
 
   return (
     <main className="min-h-screen bg-[#F6F3EC]">
-      <StorefrontHeader />
+      <StorefrontHeader adminUrl={adminUrl} />
       <StorefrontHero metrics={metrics} />
       <BrandRail brands={brands} />
       <FeaturedProducts products={productsResponse.data} />

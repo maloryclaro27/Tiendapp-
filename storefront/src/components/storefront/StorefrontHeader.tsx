@@ -3,12 +3,10 @@ import Link from "next/link";
 import { Search, ShieldCheck } from "lucide-react";
 
 type StorefrontHeaderProps = {
-  adminUrl?: string;
+  adminUrl: string;
 };
 
-export function StorefrontHeader({
-  adminUrl = "http://localhost:8080/admin",
-}: StorefrontHeaderProps) {
+export function StorefrontHeader({ adminUrl }: StorefrontHeaderProps) {
   return (
     <header className="sticky top-0 z-50 border-b border-black/[0.06] bg-[#F6F3EC]/90 backdrop-blur-xl">
       <div className="mx-auto flex h-24 max-w-7xl items-center justify-between gap-6 px-6">
