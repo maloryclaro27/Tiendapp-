@@ -1,6 +1,7 @@
 import type { ProductFilters as ProductFilterValues } from "@/lib/api";
 import { getBrands, getMetrics, getProducts } from "@/lib/api";
 import { BrandRail } from "@/components/storefront/BrandRail";
+import { FeaturedProducts } from "@/components/storefront/FeaturedProducts";
 import { ProductFilters } from "@/components/storefront/ProductFilters";
 import { ProductGrid } from "@/components/storefront/ProductGrid";
 import { StorefrontFooter } from "@/components/storefront/StorefrontFooter";
@@ -44,6 +45,7 @@ export default async function Home({
       <StorefrontHeader />
       <StorefrontHero metrics={metrics} />
       <BrandRail brands={brands} />
+      <FeaturedProducts products={productsResponse.data} />
       <ProductFilters brands={brands} filters={filters} />
       <ProductGrid products={productsResponse.data} />
       <StorefrontFooter />
